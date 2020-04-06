@@ -39,8 +39,7 @@ def main():
     # def buttons(button_id):
     #     redirect()
 
-    app.run()
-
 
 if __name__ == '__main__':
-    main()
+    port = int(os.environ.get('PORT', 6000))
+    app.run('0.0.0.0', port)
