@@ -2,6 +2,8 @@ import os
 
 from flask import Flask, render_template, redirect
 
+from data.db_session import global_init
+
 app = Flask(__name__)
 
 fields = [
@@ -60,3 +62,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+    global_init('db/seabattle.sqlite')
+    port = int(os.environ.get('PORT', 7000))
+    app.run('0.0.0.0', port)
