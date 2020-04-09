@@ -45,6 +45,7 @@ def main():
 
         if button_id[1] == '1':
             print('Вы не можете стрелять по своему полю!')
+            fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = '[ ]'
         elif button_id[1] == '2':
             if cell == '[ ]':
                 fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = '[X]'
@@ -63,3 +64,4 @@ if __name__ == '__main__':
     global_init('db/seabattle.sqlite')
     port = int(os.environ.get('PORT', 7000))
     app.run('0.0.0.0', port)
+

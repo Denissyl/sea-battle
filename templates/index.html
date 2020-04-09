@@ -5,7 +5,7 @@
         <title>Морской бой</title>
         <style type="text/css">
             table {
-                width:30%;
+                width:23%;
             }
             td {
                 text-align: center;
@@ -27,9 +27,6 @@
                 right:0;
                 background:white;
             }
-            caption {
-                caption-side: bottom;
-            }
             a.button {
                 display:block;
                 height:100%;
@@ -38,8 +35,9 @@
         </style>
     </head>
     <body bgcolor="#F0F8FF">
-        <table border="2" align="left" style="margin-top:6%; margin-left:10%" cellspacing="0">
-            <caption><h2 style="color:#fead00;"> Ваше поле </h2></caption>
+        <table border="2" align="left" style="margin-top:10%; margin-left:20%" cellspacing="0">
+            <caption align="bottom"><h2 style="color:#fead00"> Ваше поле </h2></caption>
+            <caption align="bottom"><h2 style="color:#696969;"> Разместите корабли </h2></caption>
             {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
             <tr>
             {% for j in field_letters %}
@@ -53,14 +51,18 @@
                 <th width="5%" >{{ loop.index }}</th>
                 {% for i in item %}
                     {% set url = 'button/p1' + letters_column[(loop.index) - 1] + count | string %}
-                    <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
+                    {% if i == '[ ]' %}
+                        <td bgcolor="#1E90FF"><a href={{ url }} class="button"></a></td>
+                    {% else %}
+                        <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
+                    {% endif %}
                 {% endfor %}
             {% endfor %}
          </table>
     </body>
     <body>
-        <table border="2" align="right" style="margin-top:6%; margin-right:10%" cellspacing="0">
-            <caption><h2 style="color:#fead00;"> Поле противника </h2></caption>
+        <table border="2" align="right" style="margin-top:10%; margin-right:20%" cellspacing="0">
+            <caption align="bottom"><h2 style="color:#fead00;"> Поле противника </h2></caption>
             {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
             <tr>
             {% for j in field_letters %}
