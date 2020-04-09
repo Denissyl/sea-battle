@@ -51,7 +51,7 @@ def main():
                 fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = '[X]'
                 print('Вражеский корабль подбит!')
             elif cell == ' ':
-                fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = ' . '
+                fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = ' • '
                 print('Мимо')
             elif cell == '[X]' or cell == ' . ':
                 print('Вы уже стреляли в эту клетку')
