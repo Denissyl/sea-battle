@@ -76,7 +76,11 @@
                 <th width="5%" >{{ loop.index }}</th>
                 {% for i in item %}
                     {% set url = 'button/p2' + letters_column[(loop.index) - 1] + count | string %}
-                    <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
+                    {% if i == '[ ]' %}
+                        <td bgcolor="#1E90FF"><a href={{ url }} class="button"></a></td>
+                    {% else %}
+                        <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
+                    {% endif %}
                 {% endfor %}
             {% endfor %}
          </table>
