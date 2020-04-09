@@ -57,8 +57,6 @@ def main():
 
         return redirect('/')
 
-    app.run()
-
 
 if __name__ == '__main__':
     main()
