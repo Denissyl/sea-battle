@@ -3,7 +3,6 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>Морской бой</title>
-
         <style type="text/css">
             table {
                 width:30%;
@@ -28,16 +27,19 @@
                 right:0;
                 background:white;
             }
-
-        </style>
-    </head>
-    <head>
-        <style type="text/css">
-        a.button {display:block; height:100%; width:100%;}
+            caption {
+                caption-side: bottom;
+            }
+            a.button {
+                display:block;
+                height:100%;
+                width:100%;
+            }
         </style>
     </head>
     <body bgcolor="#F0F8FF">
-        <table border="2" align="left" style="margin-top:100px; margin-left:200px" cellspacing="0">
+        <table border="2" align="left" style="margin-top:6%; margin-left:10%" cellspacing="0">
+            <caption><h2 style="color:#fead00;"> Ваше поле </h2></caption>
             {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
             <tr>
             {% for j in field_letters %}
@@ -57,7 +59,8 @@
          </table>
     </body>
     <body>
-        <table border="2" align="right" style="margin-top:100px; margin-right:200px" cellspacing="0">
+        <table border="2" align="right" style="margin-top:6%; margin-right:10%" cellspacing="0">
+            <caption><h2 style="color:#fead00;"> Поле противника </h2></caption>
             {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
             <tr>
             {% for j in field_letters %}
@@ -75,10 +78,7 @@
                 {% endfor %}
             {% endfor %}
          </table>
-
-        <h2 style="color:#fead00; top: 700px; right: 370px; position: relative;"> Ваше поле </h2>
-        <h2 style="color:#fead00; top: 654px; left: 550px; position: relative;"> Поле противника </h2>
-        <h1 style="color:#000000; top: -60px; text-align: center; position: relative"> Морской бой </h1>
+        <h1 style="color:#000000; top: 2%; left: 45%; text-align: center; position: absolute"> Морской бой </h1>
         <input type="button" style="position:absolute; left: 45%; top: 85%; height: 50px; width: 200px;" name="play" value="Играть" />
     </body>
 </html>
