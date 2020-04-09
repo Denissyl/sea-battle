@@ -3,10 +3,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>Морской бой</title>
-
         <style type="text/css">
             table {
-                width:30%;
+                width:23%;
             }
             td {
                 text-align: center;
@@ -28,311 +27,60 @@
                 right:0;
                 background:white;
             }
-
-        </style>
-    </head>
-    <head>
-        <style type="text/css">
-        a.button {display:block; height:100%; width:100%;}
+            a.button {
+                display:block;
+                height:100%;
+                width:100%;
+            }
         </style>
     </head>
     <body bgcolor="#F0F8FF">
-        <table border="2" align="left" style="margin-top:100px; margin-left:200px" cellspacing="0">
+        <table border="2" align="left" style="margin-top:10%; margin-left:20%" cellspacing="0">
+            <caption align="bottom"><h2 style="color:#fead00"> Ваше поле </h2></caption>
+            <caption align="bottom"><h2 style="color:#696969;"> Разместите корабли </h2></caption>
+            {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
             <tr>
-                <th></th>
-                <th>А</th>
-                <th>Б</th>
-                <th>В</th>
-                <th>Г</th>
-                <th>Д</th>
-                <th>Е</th>
-                <th>Ж</th>
-                <th>З</th>
-                <th>И</th>
-                <th>К</th>
+            {% for j in field_letters %}
+                    <th>{{ j }}</th>
+                {% endfor %}
             </tr>
-            <tr>
-                <th width="5%" >1</th>
-                <td><div class="my_div"><a href="#" class="button" name="p1_a1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_a2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_a3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_a4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_a5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_a6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_a7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_a8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_a9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_a10"></a></div></td>
-            </tr>
-            <tr>
-                <th>2</th>
-                <td><div class="my_div"><a href="#" class="button" name="p1_b1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_b2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_b3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_b4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_b5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_b6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_b7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_b8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_b9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_b10"></a></div></td>
-            </tr>
-            <tr>
-                <th>3</th>
-                <td><div class="my_div"><a href="#" class="button" name="p1_c1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_c2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_c3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_c4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_c5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_c6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_c7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_c8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_c9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_c10"></a></div></td>
-            </tr>
-            <tr>
-                <th>4</th>
-                <td><div class="my_div"><a href="#" class="button" name="p1_d1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_d2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_d3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_d4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_d5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_d6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_d7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_d8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_d9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_d10"></a></div></td>
-            </tr>
-            <tr>
-                <th>5</th>
-                <td><div class="my_div"><a href="#" class="button" name="p1_e1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_e2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_e3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_e4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_e5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_e6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_e7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_e8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_e9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_e10"></a></div></td>
-            </tr>
-            <tr>
-                <th>6</th>
-                <td><div class="my_div"><a href="#" class="button" name="p1_f1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_f2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_f3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_f4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_f5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_f6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_f7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_f8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_f9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_f10"></a></div></td>
-            </tr>
-            <tr>
-                <th>7</th>
-                <td><div class="my_div"><a href="#" class="button" name="p1_g1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_g2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_g3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_g4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_g5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_g6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_g7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_g8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_g9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_g10"></a></div></td>
-            </tr>
-            <tr>
-                <th>8</th>
-                <td><div class="my_div"><a href="#" class="button" name="p1_h1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_h2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_h3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_h4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_h5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_h6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_h7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_h8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_h9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_h10"></a></div></td>
-            </tr>
-            <tr>
-                <th>9</th>
-                <td><div class="my_div"><a href="#" class="button" name="p1_i1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_i2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_i3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_i4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_i5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_i6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_i7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_i8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_i9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_i10"></a></div></td>
-            </tr>
-            <tr>
-                <th>10</th>
-                <td><div class="my_div"><a href="#" class="button" name="p1_j1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_j2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_j3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_j4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_j5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_j6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_j7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_j8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_j9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p1_j10"></a></div></td>
-            </tr>
+            {% set letters_column = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] %}
+            {% for item in player1_field %}
+                {% set count = loop.index %}
+                <tr></tr>
+                <th width="5%" >{{ loop.index }}</th>
+                {% for i in item %}
+                    {% set url = 'button/p1' + letters_column[(loop.index) - 1] + count | string %}
+                    {% if i == '[ ]' %}
+                        <td bgcolor="#1E90FF"><a href={{ url }} class="button"></a></td>
+                    {% else %}
+                        <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
          </table>
     </body>
     <body>
-        <table border="2" align="right" style="margin-top:100px; margin-right:200px" cellspacing="0">
+        <table border="2" align="right" style="margin-top:10%; margin-right:20%" cellspacing="0">
+            <caption align="bottom"><h2 style="color:#fead00;"> Поле противника </h2></caption>
+            {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
             <tr>
-                <th></th>
-                <th>А</th>
-                <th>Б</th>
-                <th>В</th>
-                <th>Г</th>
-                <th>Д</th>
-                <th>Е</th>
-                <th>Ж</th>
-                <th>З</th>
-                <th>И</th>
-                <th>К</th>
+            {% for j in field_letters %}
+                    <th>{{ j }}</th>
+                {% endfor %}
             </tr>
-            <tr>
-                <th width="5%" >1</th>
-                <td><div class="my_div"><a href="#" class="button" name="p2_a1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_a2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_a3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_a4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_a5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_a6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_a7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_a8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_a9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_a10"></a></div></td>
-            </tr>
-            <tr>
-                <th>2</th>
-                <td><div class="my_div"><a href="#" class="button" name="p2_b1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_b2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_b3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_b4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_b5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_b6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_b7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_b8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_b9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_b10"></a></div></td>
-            </tr>
-            <tr>
-                <th>3</th>
-                <td><div class="my_div"><a href="#" class="button" name="p2_c1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_c2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_c3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_c4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_c5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_c6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_c7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_c8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_c9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_c10"></a></div></td>
-            </tr>
-            <tr>
-                <th>4</th>
-                <td><div class="my_div"><a href="#" class="button" name="p2_d1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_d2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_d3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_d4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_d5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_d6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_d7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_d8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_d9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_d10"></a></div></td>
-            </tr>
-            <tr>
-                <th>5</th>
-                <td><div class="my_div"><a href="#" class="button" name="p2_e1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_e2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_e3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_e4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_e5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_e6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_e7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_e8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_e9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_e10"></a></div></td>
-            </tr>
-            <tr>
-                <th>6</th>
-                <td><div class="my_div"><a href="#" class="button" name="p2_f1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_f2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_f3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_f4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_f5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_f6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_f7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_f8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_f9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_f10"></a></div></td>
-            </tr>
-            <tr>
-                <th>7</th>
-                <td><div class="my_div"><a href="#" class="button" name="p2_g1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_g2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_g3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_g4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_g5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_g6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_g7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_g8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_g9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_g10"></a></div></td>
-            </tr>
-            <tr>
-                <th>8</th>
-                <td><div class="my_div"><a href="#" class="button" name="p2_h1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_h2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_h3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_h4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_h5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_h6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_h7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_h8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_h9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_h10"></a></div></td>
-            </tr>
-            <tr>
-                <th>9</th>
-                <td><div class="my_div"><a href="#" class="button" name="p2_i1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_i2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_i3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_i4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_i5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_i6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_i7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_i8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_i9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_i10"></a></div></td>
-            </tr>
-            <tr>
-                <th>10</th>
-                <td><div class="my_div"><a href="#" class="button" name="p2_j1"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_j2"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_j3"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_j4"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_j5"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_j6"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_j7"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_j8"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_j9"></a></div></td>
-                <td><div class="my_div"><a href="#" class="button" name="p2_j10"></a></div></td>
-            </tr>
+            {% set letters_column = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] %}
+            {% for item in player2_field %}
+                {% set count = loop.index %}
+                <tr></tr>
+                <th width="5%" >{{ loop.index }}</th>
+                {% for i in item %}
+                    {% set url = 'button/p2' + letters_column[(loop.index) - 1] + count | string %}
+                    <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
+                {% endfor %}
+            {% endfor %}
          </table>
-
-        <h2 style="color:#fead00; top: 700px; right: 370px; position: relative;"> Ваше поле </h2>
-        <h2 style="color:#fead00; top: 654px; left: 550px; position: relative;"> Поле противника </h2>
-        <h1 style="color:#000000; top: -60px; text-align: center; position: relative"> Морской бой </h1>
+        <h1 style="color:#000000; top: 2%; left: 45%; text-align: center; position: absolute"> Морской бой </h1>
         <input type="button" style="position:absolute; left: 45%; top: 85%; height: 50px; width: 200px;" name="play" value="Играть" />
     </body>
 </html>
