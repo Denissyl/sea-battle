@@ -51,16 +51,19 @@ def main():
         if game_status == statuses[0]:
             if button_id == 'start':
                 game_status = statuses[1]
+
             elif button_id[1] == '1':
                 if fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] == ' ':
                     fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = '[ ]'
                 elif fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] == '[ ]':
                     fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = ' '
+
             elif button_id[1] == '2':
                 print('Вы не можете стрелять по вражескому полю на этапе подготовки')
         elif game_status == statuses[1]:
             if button_id[1] == '1':
                 print('Вы не можете стрелять по своему полю!')
+
             elif button_id[1] == '2':
                 if cell == '[ ]':
                     fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = '[X]'
@@ -68,9 +71,11 @@ def main():
                         print('Вражеский корабль потоплен!')
                     else:
                         print('Вражеский корабль подбит!')
+
                 elif cell == ' ':
                     fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = ' • '
                     print('Мимо')
+                    
                 elif cell == '[X]' or cell == ' • ':
                     print('Вы уже стреляли в эту клетку')
 
