@@ -27,6 +27,27 @@
                 right:0;
                 background:white;
             }
+
+            td {
+                text-align: center;
+                width:9%;
+                position:relative;
+            }
+            td:after{
+                content:'';
+                display:block;
+                margin-top:100%;
+            }
+            td .my_div2 {
+                font-size: 20;
+                position:absolute;
+                padding-top: 70;
+                top:0;
+                bottom:0;
+                left:0;
+                right:0;
+                background:RoyalBlue;
+            }
             a.button {
                 display:block;
                 height:100%;
@@ -52,7 +73,7 @@
                 {% for i in item %}
                     {% set url = 'button/p1' + letters_column[(loop.index) - 1] + count | string %}
                     {% if i == '[ ]' %}
-                        <td bgcolor="#1E90FF"><a href={{ url }} class="button"></a></td>
+                        <td><div class="my_div2"><a href={{ url }} class="button"></a></div></td>
                     {% else %}
                         <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
                     {% endif %}
@@ -77,7 +98,9 @@
                 {% for i in item %}
                     {% set url = 'button/p2' + letters_column[(loop.index) - 1] + count | string %}
                     {% if i == '[ ]' %}
-                        <td bgcolor="#1E90FF"><a href={{ url }} class="button"></a></td>
+                        <td><div class="my_div"><a href={{ url }} class="button"></a></div></td>
+                    {% elif i == '[X]' %}
+                        <td bgcolor="#B22222"><a href={{ url }} class="button"></a></td>
                     {% else %}
                         <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
                     {% endif %}
