@@ -1,4 +1,5 @@
 import os
+import random
 
 from flask import Flask, render_template, redirect
 
@@ -75,11 +76,48 @@ def main():
                 elif cell == ' ':
                     fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = ' • '
                     print('Мимо')
-                    
+
                 elif cell == '[X]' or cell == ' • ':
                     print('Вы уже стреляли в эту клетку')
 
         return redirect('/')
+
+
+def place_ship(x, y, hor, length, field):
+    for i in range(length):
+        if hor:
+            fields[field][y][x + i] = '[ ]'
+        else:
+            fields[field][y + i][x] = '[ ]'
+
+
+def can_place_ship(x, y, hor, length, field):
+    if hor:
+        for j in range(y - 1, y + 2):
+            for i in range(x - 1, x + length + 1):
+                if fields[field][j][i] == '[ ]' or not (-1 <= i <= 10 and -1 <= j <= 10):
+                    return False
+    else:
+        for j in range(y - 1, y + length + 1):
+            for i in range(x - 1, x + 2):
+                if fields[field][j][i] == '[ ]' or not (-1 <= i <= 10 and -1 <= j <= 10):
+                    return False
+    return True
+
+
+def random_placement(field):
+    available_ships = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
+    for _ in range(10):
+        index = random.choice(range(len(available_ships)))
+        length = available_ships.pop(index)
+        x = random.randint(0, 9)
+        y = random.randint(0, 9)
+        hor = random.randint(0, 1)
+        while not can_place_ship(x, y, hor, length, field):
+            x = random.randint(0, 9)
+            y = random.randint(0, 9)
+            hor = random.randint(0, 1)
+        place_ship(x, y, hor, length, field)
 
 
 def check_nearby_cells(cord):
