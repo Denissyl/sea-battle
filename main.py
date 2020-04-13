@@ -114,13 +114,13 @@ def random_placement(field):
     for _ in range(10):
         index = random.choice(range(len(available_ships)))
         length = available_ships.pop(index)
-        x = random.randint(0, 9)
-        y = random.randint(0, 9)
         hor = random.randint(0, 1)
+        x = random.randint(0, 9 - length * hor)
+        y = random.randint(0, 9 - length * (1 - hor))
         while not can_place_ship(x, y, hor, length, field):
-            x = random.randint(0, 9)
-            y = random.randint(0, 9)
             hor = random.randint(0, 1)
+            x = random.randint(0, 9 - length * hor)
+            y = random.randint(0, 9 - length * (1 - hor))
         place_ship(x, y, hor, length, field)
 
 
