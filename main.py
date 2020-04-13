@@ -97,13 +97,15 @@ def can_place_ship(x, y, hor, length, field):
     if hor:
         for j in range(y - 1, y + 2):
             for i in range(x - 1, x + length + 1):
-                if fields[field][j][i] == '[ ]' or not (-1 <= i <= 10 and -1 <= j <= 10):
-                    return False
+                if 0 <= i < 10 and 0 <= j < 10:
+                    if fields[field][j][i] == '[ ]':
+                        return False
     else:
         for j in range(y - 1, y + length + 1):
             for i in range(x - 1, x + 2):
-                if fields[field][j][i] == '[ ]' or not (-1 <= i <= 10 and -1 <= j <= 10):
-                    return False
+                if 0 <= i < 10 and 0 <= j < 10:
+                    if fields[field][j][i] == '[ ]':
+                        return False
     return True
 
 
