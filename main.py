@@ -41,11 +41,13 @@ def main():
 
     @app.route('/button/<button_id>')
     def buttons(button_id):
+
         if button_id != 'start':
             letters_id = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7, 'i': 8, 'j': 9}
+            field_id, y, x = int(button_id[1]) - 1, int(button_id[3]) - 1, letters_id[button_id[2]]
             button_id = list(button_id)
             button_id[3] = ''.join(button_id[3:])
-            cell = fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]]
+            cell = fields[field_id][y][x]
 
         global game_status
 
@@ -54,10 +56,10 @@ def main():
                 game_status = statuses[1]
 
             elif button_id[1] == '1':
-                if fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] == ' ':
-                    fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = '[ ]'
-                elif fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] == '[ ]':
-                    fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = ' '
+                if fields[field_id][y][x] == ' ':
+                    fields[field_id][y][x] = '[ ]'
+                elif fields[field_id][y][x] == '[ ]':
+                    fields[field_id][y][x] = ' '
 
             elif button_id[1] == '2':
                 print('Вы не можете стрелять по вражескому полю на этапе подготовки')
@@ -67,14 +69,14 @@ def main():
 
             elif button_id[1] == '2':
                 if cell == '[ ]':
-                    fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = '[X]'
-                    if check_nearby_cells([int(button_id[1]) - 1, int(button_id[3]) - 1, letters_id[button_id[2]]]) == 0:
+                    fields[field_id][y][x] = '[X]'
+                    if check_nearby_cells([field_id, y, x]) == 0:
                         print('Вражеский корабль потоплен!')
                     else:
                         print('Вражеский корабль подбит!')
 
                 elif cell == ' ':
-                    fields[int(button_id[1]) - 1][int(button_id[3]) - 1][letters_id[button_id[2]]] = ' • '
+                    fields[field_id][y][x] = ' • '
                     print('Мимо')
 
                 elif cell == '[X]' or cell == ' • ':
@@ -125,57 +127,100 @@ def random_placement(field):
 
 
 def check_nearby_cells(cord):
+    location_horizontal = define_plane(cord)
+
     field_id, y, x = cord
-    location_horizontal = None
-
-    if y != 9:
-        if fields[field_id][y + 1][x] in ['[ ]', '[X]']:
-            location_horizontal = False
-    if y != 0:
-        if fields[field_id][y - 1][x] in ['[ ]', '[X]']:
-            location_horizontal = False
-    if x != 9:
-        if fields[field_id][y][x + 1] in ['[ ]', '[X]']:
-            location_horizontal = True
-    if x != 0:
-        if fields[field_id][y][x - 1] in ['[ ]', '[X]']:
-            location_horizontal = True
-
     whole_sections = 0
 
-    if location_horizontal:
-        while x != -1:
-            if fields[field_id][y][x] == '[ ]':
-                whole_sections += 1
-            elif fields[field_id][y][x] not in ['[ ]', '[X]']:
-                break
+    while x != -1:
+        if fields[field_id][y][x] == '[ ]':
+            whole_sections += 1
+        elif fields[field_id][y][x] not in ['[ ]', '[X]']:
+            break
+        if location_horizontal:
             x -= 1
-        x += 1
-        while x != 10:
-            if fields[field_id][y][x] == '[ ]':
-                whole_sections += 1
-            elif fields[field_id][y][x] not in ['[ ]', '[X]']:
-                break
-            x += 1
-
-    elif not location_horizontal:
-        while y != -1:
-            if fields[field_id][y][x] == '[ ]':
-                whole_sections += 1
-            elif fields[field_id][y][x] not in ['[ ]', '[X]']:
-                break
+        else:
             y -= 1
+
+    if location_horizontal:
+        x += 1
+    else:
         y += 1
-        while y != 10:
-            if fields[field_id][y][x] == '[ ]':
-                whole_sections += 1
-            elif fields[field_id][y][x] not in ['[ ]', '[X]']:
-                break
+
+    while x != 10:
+        if fields[field_id][y][x] == '[ ]':
+            whole_sections += 1
+        elif fields[field_id][y][x] not in ['[ ]', '[X]']:
+            break
+        if location_horizontal:
+            x += 1
+        else:
             y += 1
+
     else:
         return 0
 
     return whole_sections
+
+
+def define_plane(cord):
+    field_id, y, x = cord
+
+    if y != 9:
+        if fields[field_id][y + 1][x] in ['[ ]', '[X]']:
+            return False
+    if y != 0:
+        if fields[field_id][y - 1][x] in ['[ ]', '[X]']:
+            return False
+    if x != 9:
+        if fields[field_id][y][x + 1] in ['[ ]', '[X]']:
+            return True
+    if x != 0:
+        if fields[field_id][y][x - 1] in ['[ ]', '[X]']:
+            return True
+
+
+def mark_destroyed_ship(cord):
+    location_horizontal = define_plane(cord)
+    field_id, y, x = cord
+
+    while x != -1:
+        if fields[field_id][y][x] == '[X]':
+            set_dots(cord)
+        elif fields[field_id][y][x] not in ['[ ]', '[X]']:
+            break
+        if location_horizontal:
+            x -= 1
+        else:
+            y -= 1
+
+    if location_horizontal:
+        x += 1
+    else:
+        y += 1
+
+    while x != 10:
+        if fields[field_id][y][x] == '[X]':
+            set_dots(cord)
+        elif fields[field_id][y][x] not in ['[ ]', '[X]']:
+            break
+        if location_horizontal:
+            x += 1
+        else:
+            y += 1
+
+
+def set_dots(cord):
+    field_id, y, x = cord
+
+    for i in range(2):
+        if y == 0 and i == 0 or y == 9 and y == 1:
+            continue
+        for j in range(2):
+            if x == 0 and j == 0 or x == 9 and j == 1:
+                continue
+            elif fields[field_id][y][x] == '[ ]':
+                fields[field_id][y][x] = '[ • ]'
 
 
 if __name__ == '__main__':
