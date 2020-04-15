@@ -44,7 +44,8 @@ def main():
 
         if button_id != 'start':
             letters_id = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7, 'i': 8, 'j': 9}
-            field_id, y, x = int(button_id[1]) - 1, int(button_id[3]) - 1, letters_id[button_id[2]]
+            field_id, y, x = int(button_id[1]) - 1, int(''.join(button_id[3:])) - 1, letters_id[button_id[2]]
+            cords = field_id, y, x
             button_id = list(button_id)
             button_id[3] = ''.join(button_id[3:])
             cell = fields[field_id][y][x]
@@ -71,6 +72,7 @@ def main():
                 if cell == '[ ]':
                     fields[field_id][y][x] = '[X]'
                     if check_nearby_cells([field_id, y, x]) == 0:
+                        mark_destroyed_ship([field_id, y, x])
                         print('Вражеский корабль потоплен!')
                     else:
                         print('Вражеский корабль подбит!')
@@ -186,7 +188,7 @@ def mark_destroyed_ship(cord):
 
     while x != -1:
         if fields[field_id][y][x] == '[X]':
-            set_dots(cord)
+            set_dots([field_id, y, x])
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
             break
         if location_horizontal:
@@ -201,7 +203,7 @@ def mark_destroyed_ship(cord):
 
     while x != 10:
         if fields[field_id][y][x] == '[X]':
-            set_dots(cord)
+            set_dots([field_id, y, x])
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
             break
         if location_horizontal:
@@ -213,14 +215,14 @@ def mark_destroyed_ship(cord):
 def set_dots(cord):
     field_id, y, x = cord
 
-    for i in range(2):
-        if y == 0 and i == 0 or y == 9 and y == 1:
+    for i in range(-1, 2):
+        if (y == 0 and i == -1) or (y == 9 and i == 1):
             continue
-        for j in range(2):
-            if x == 0 and j == 0 or x == 9 and j == 1:
+        for j in range(-1, 2):
+            if (x == 0 and j == -1) or (x == 9 and j == 1):
                 continue
-            elif fields[field_id][y][x] == '[ ]':
-                fields[field_id][y][x] = '[ • ]'
+            elif fields[field_id][y + i][x + j] == ' ':
+                fields[field_id][y + i][x + j] = ' • '
 
 
 if __name__ == '__main__':
