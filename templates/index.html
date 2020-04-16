@@ -56,6 +56,7 @@
         </style>
     </head>
     <body bgcolor="#F0F8FF">
+        <h1 style="color:#000000; top: 2%; left: 45%; text-align: center; margin: 50px auto 10px;"> Морской бой </h1>
         <table border="2" align="left" style="margin-top:10%; margin-left:20%" cellspacing="0">
             <caption align="bottom"><h2 style="color:#fead00"> Ваше поле </h2></caption>
             <caption align="bottom"><h2 style="color:#696969;"> Разместите корабли </h2></caption>
@@ -107,9 +108,8 @@
                 {% endfor %}
             {% endfor %}
          </table>
-        <h1 style="color:#000000; top: 2%; left: 45%; text-align: center; position: absolute"> Морской бой </h1>
         <form action="/button/start">
-            <input type="submit" style="position:absolute; left: 45%; top: 85%; height: 50px; width: 200px;" name="play" value="Играть" />
+            <input type="submit" style="margin: 0 auto; top: 85%; height: 50px; width: 200px; display: block;" name="play" value="Играть" />
         </form>
     </body>
 </html>
