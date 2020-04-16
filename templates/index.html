@@ -4,9 +4,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>Морской бой</title>
         <style type="text/css">
-            table {
-                width:23%;
-            }
             td {
                 text-align: center;
                 width:9%;
@@ -55,61 +52,65 @@
             }
         </style>
     </head>
-    <body bgcolor="#F0F8FF">
-        <h1 style="color:#000000; top: 2%; left: 45%; text-align: center; margin: 50px auto 10px;"> Морской бой </h1>
-        <table border="2" align="left" style="margin-top:10%; margin-left:20%" cellspacing="0">
-            <caption align="bottom"><h2 style="color:#fead00"> Ваше поле </h2></caption>
-            <caption align="bottom"><h2 style="color:#696969;"> Разместите корабли </h2></caption>
-            {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
-            <tr>
-            {% for j in field_letters %}
-                    <th>{{ j }}</th>
-                {% endfor %}
-            </tr>
-            {% set letters_column = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] %}
-            {% for item in player1_field %}
-                {% set count = loop.index %}
-                <tr></tr>
-                <th width="5%" >{{ loop.index }}</th>
-                {% for i in item %}
-                    {% set url = 'button/p1' + letters_column[(loop.index) - 1] + count | string %}
-                    {% if i == '[ ]' %}
-                        <td><div class="my_div2"><a href={{ url }} class="button"></a></div></td>
-                    {% else %}
-                        <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
-         </table>
-    </body>
-    <body>
-        <table border="2" align="right" style="margin-top:10%; margin-right:20%" cellspacing="0">
-            <caption align="bottom"><h2 style="color:#fead00;"> Поле противника </h2></caption>
-            {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
-            <tr>
-            {% for j in field_letters %}
-                    <th>{{ j }}</th>
-                {% endfor %}
-            </tr>
-            {% set letters_column = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] %}
-            {% for item in player2_field %}
-                {% set count = loop.index %}
-                <tr></tr>
-                <th width="5%" >{{ loop.index }}</th>
-                {% for i in item %}
-                    {% set url = 'button/p2' + letters_column[(loop.index) - 1] + count | string %}
-                    {% if i == '[ ]' %}
-                        <td><div class="my_div"><a href={{ url }} class="button"></a></div></td>
-                    {% elif i == '[X]' %}
-                        <td bgcolor="#B22222"><a href={{ url }} class="button"></a></td>
-                    {% else %}
-                        <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
-         </table>
-        <form action="/button/start">
-            <input type="submit" style="margin: 0 auto; top: 85%; height: 50px; width: 200px; display: block;" name="play" value="Играть" />
-        </form>
-    </body>
+<body bgcolor="#F0F8FF">
+<h1 style="color:#000000; text-align: center;"> Морской бой </h1>
+<div style="max-width: 60%; margin: 100px auto 10px">
+<table border="2" align="left" width="45%" cellspacing="0">
+    <caption align="bottom"><h2 style="color:#fead00"> Ваше поле </h2></caption>
+    <caption align="bottom"><h2 style="color:#696969;"> Разместите корабли </h2></caption>
+    {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
+    <tr>
+    {% for j in field_letters %}
+            <th>{{ j }}</th>
+        {% endfor %}
+    </tr>
+    {% set letters_column = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] %}
+    {% for item in player1_field %}
+        {% set count = loop.index %}
+        <tr></tr>
+        <th width="5%" >{{ loop.index }}</th>
+        {% for i in item %}
+            {% set url = 'button/p1' + letters_column[(loop.index) - 1] + count | string %}
+            {% if i == '[ ]' %}
+                <td><div class="my_div2"><a href={{ url }} class="button"></a></div></td>
+            {% else %}
+                <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+ </table>
+<table border="2" align="right" width="45%" cellspacing="0">
+    <caption align="bottom"><h2 style="color:#fead00;"> Поле противника </h2></caption>
+    {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
+    <tr>
+    {% for j in field_letters %}
+            <th>{{ j }}</th>
+        {% endfor %}
+    </tr>
+    {% set letters_column = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] %}
+    {% for item in player2_field %}
+        {% set count = loop.index %}
+        <tr></tr>
+        <th width="5%" >{{ loop.index }}</th>
+        {% for i in item %}
+            {% set url = 'button/p2' + letters_column[(loop.index) - 1] + count | string %}
+            {% if i == '[ ]' %}
+                <td><div class="my_div"><a href={{ url }} class="button"></a></div></td>
+            {% elif i == '[X]' %}
+                <td bgcolor="#B22222"><a href={{ url }} class="button"></a></td>
+            {% else %}
+                <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+ </table>
+</div>
+<div style="clear: both;">
+    <form action="/button/start">
+        <input type="submit" style="margin: 0 auto; top: 85%; height: 50px; width: 200px; display: block;"
+               name="play"
+               value="Играть" />
+    </form>
+</div>
+</body>
 </html>
