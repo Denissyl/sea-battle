@@ -57,9 +57,9 @@ def main():
                 game_status = statuses[1]
 
             elif button_id[1] == '1':
-                if fields[field_id][y][x] == ' ':
+                if cell == ' ':
                     fields[field_id][y][x] = '[ ]'
-                elif fields[field_id][y][x] == '[ ]':
+                elif cell == '[ ]':
                     fields[field_id][y][x] = ' '
 
             elif button_id[1] == '2':
@@ -69,24 +69,30 @@ def main():
                 print('Вы не можете стрелять по своему полю!')
 
             elif button_id[1] == '2':
-                if cell == '[ ]':
-                    fields[field_id][y][x] = '[X]'
-                    if check_nearby_cells([field_id, y, x]) == 0:
-                        mark_destroyed_ship([field_id, y, x])
-                        print('Вражеский корабль потоплен!')
-                    else:
-                        print('Вражеский корабль подбит!')
-
-                elif cell == ' ':
-                    fields[field_id][y][x] = ' • '
-                    print('Мимо')
-
-                elif cell == '[X]' or cell == ' • ':
-                    print('Вы уже стреляли в эту клетку')
+                shot(cell, cords)
 
         return redirect('/')
 
     random_placement(1)
+
+
+def shot(cell, cord):
+    field_id, y, x = cord
+
+    if cell == '[ ]':
+        fields[field_id][y][x] = '[X]'
+        if check_nearby_cells([field_id, y, x]) == 0:
+            mark_destroyed_ship([field_id, y, x])
+            print('Вражеский корабль потоплен!')
+        else:
+            print('Вражеский корабль подбит!')
+
+    elif cell == ' ':
+        fields[field_id][y][x] = ' • '
+        print('Мимо')
+
+    elif cell == '[X]' or cell == ' • ':
+        print('Вы уже стреляли в эту клетку')
 
 
 def place_ship(x, y, hor, length, field):
@@ -168,18 +174,24 @@ def check_nearby_cells(cord):
 def define_plane(cord):
     field_id, y, x = cord
 
-    if y != 9:
-        if fields[field_id][y + 1][x] in ['[ ]', '[X]']:
-            return False
-    if y != 0:
-        if fields[field_id][y - 1][x] in ['[ ]', '[X]']:
-            return False
-    if x != 9:
-        if fields[field_id][y][x + 1] in ['[ ]', '[X]']:
-            return True
-    if x != 0:
-        if fields[field_id][y][x - 1] in ['[ ]', '[X]']:
-            return True
+    result = None
+    for i in range(-1, 2):
+        if y == 0 and i == -1 or y == 9 and i == 1:
+            continue
+        for j in range(-1, 2):
+            if x == 0 and j == -1 or x == 9 and j == 1:
+                continue
+            elif fields[field_id][y + i][x + j] in ['[ ]', '[X]']:
+                if result is not None:
+                    result = None
+                elif i == 0 and j in [-1, 1]:
+                    result = True
+                elif j == 0 and i in [-1, 1]:
+                    result = False
+                elif i in [-1, 1] and j in [-1, 1]:
+                    result = None
+
+    return result
 
 
 def mark_destroyed_ship(cord):
