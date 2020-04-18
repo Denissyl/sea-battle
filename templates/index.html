@@ -25,16 +25,6 @@
                 background:white;
             }
 
-            td {
-                text-align: center;
-                width:9%;
-                position:relative;
-            }
-            td:after{
-                content:'';
-                display:block;
-                margin-top:100%;
-            }
             td .my_div2 {
                 font-size: 20;
                 position:absolute;
@@ -54,10 +44,10 @@
     </head>
 <body bgcolor="#F0F8FF">
 <h1 style="color:#000000; text-align: center;"> Морской бой </h1>
+<h2 style="color:#696969; text-align: center;"> {{ info }} </h2>
 <div style="max-width: 60%; margin: 100px auto 10px">
 <table border="2" align="left" width="45%" cellspacing="0">
     <caption align="bottom"><h2 style="color:#fead00"> Ваше поле </h2></caption>
-    <caption align="bottom"><h2 style="color:#696969;"> Разместите корабли </h2></caption>
     {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
     <tr>
     {% for j in field_letters %}
@@ -98,6 +88,8 @@
                 <td><div class="my_div"><a href={{ url }} class="button"></a></div></td>
             {% elif i == '[X]' %}
                 <td bgcolor="#B22222"><a href={{ url }} class="button"></a></td>
+            {% elif i == ' • ' %}
+                <td><div class="my_div">&#9679;</div></td>
             {% else %}
                 <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
             {% endif %}

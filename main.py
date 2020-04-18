@@ -32,13 +32,14 @@ fields = [
      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]]
 statuses = ['preparation', 'game is on', 'game over']
 game_status = 'preparation'
-
+info = 'Разместите корабли'
+count = 0
 
 def main():
     @app.route('/')
     def index():
         return render_template('index.html', player1_field=fields[0],
-                               player2_field=fields[1])
+                               player2_field=fields[1], info=info)
 
     @app.route('/button/<button_id>')
     def buttons(button_id):
@@ -52,9 +53,10 @@ def main():
             cell = fields[field_id][y][x]
 
         global game_status
-
+        global info
         if game_status == statuses[0]:
             if button_id == 'start':
+                info = "Ваш ход"
                 game_status = statuses[1]
 
             elif button_id[1] == '1':
@@ -64,9 +66,11 @@ def main():
                     fields[field_id][y][x] = ' '
 
             elif button_id[1] == '2':
+                info = 'Вы не можете стрелять по вражескому полю на этапе подготовки'
                 print('Вы не можете стрелять по вражескому полю на этапе подготовки')
         elif game_status == statuses[1]:
             if button_id[1] == '1':
+                info = 'Вы не можете стрелять по своему полю!'
                 print('Вы не можете стрелять по своему полю!')
 
             elif button_id[1] == '2':
@@ -78,22 +82,35 @@ def main():
 
 
 def shot(cell, cord):
+    global info, count
     field_id, y, x = cord
-
     if cell == '[ ]':
         fields[field_id][y][x] = '[X]'
+        count += 1
         if check_nearby_cells([field_id, y, x]) == 0:
             mark_destroyed_ship([field_id, y, x])
+            print(count)
+            if count == 20:
+                info = "ВЫ ВЫИГРАЛИ"
+            else:
+                info = 'Вражеский корабль потоплен!'
             print('Вражеский корабль потоплен!')
         else:
+            if count == 20:
+                info = "ВЫ ВЫИГРАЛИ"
+            else:
+                info = 'Вражеский корабль подбит!'
+
             print('Вражеский корабль подбит!')
 
     elif cell == ' ':
         fields[field_id][y][x] = ' • '
+        info = 'Мимо'
         print('Мимо')
 
-    elif cell == '[X]' or cell == ' • ':
-        print('Вы уже стреляли в эту клетку')
+    # elif cell == '[X]' or cell == ' • ':
+        # info = 'Вы уже стреляли в эту клетку'
+        # print('Вы уже стреляли в эту клетку')
 
 
 def place_ship(x, y, hor, length, field):
