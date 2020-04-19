@@ -32,7 +32,7 @@ fields = [
 statuses = ['preparation', 'game is on', 'game over']
 game_status = 'preparation'
 info = 'Разместите корабли'
-count = 0
+
 
 
 def main():
@@ -69,11 +69,22 @@ def main():
                 info = 'Вы не можете стрелять по вражескому полю на этапе подготовки!'
 
         elif game_status == statuses[1]:
-            if button_id[1] == '1':
+            if check_count_ships(0) == 0:
+                info = 'Вы проиграли'
+                game_status = statuses[2]
+
+            elif check_count_ships(1) == 0:
+                info = 'Вы победили'
+                game_status = statuses[2]
+
+            elif button_id[1] == '1':
                 info = 'Вы не можете стрелять по своему полю!'
 
             elif button_id[1] == '2':
                 shot(cell, cords)
+
+        elif game_status == statuses[2]:
+            info = 'Игра окончена'
 
         return redirect('/')
 
@@ -81,7 +92,7 @@ def main():
 
 
 def shot(cell, cord):
-    global info, count
+    global info
     field_id, y, x = cord
 
     if cell == '[ ]':
@@ -89,16 +100,9 @@ def shot(cell, cord):
 
         if check_whole_sections(cord, define_plane(cord)) == 0:
             mark_destroyed_ship(cord)
-            print(count)
-            if count == 20:
-                info = "ВЫ ВЫИГРАЛИ"
-            else:
-                info = 'Вражеский корабль потоплен!'
+            info = 'Вражеский корабль потоплен!'
         else:
-            if count == 20:
-                info = "ВЫ ВЫИГРАЛИ"
-            else:
-                info = 'Вражеский корабль подбит!'
+            info = 'Вражеский корабль подбит!'
 
     elif cell == ' ':
         fields[field_id][y][x] = ' • '
@@ -106,6 +110,17 @@ def shot(cell, cord):
 
     elif cell == '[X]' or cell == ' • ':
         info = 'Вы уже стреляли в эту клетку'
+
+
+def check_count_ships(player_id):
+    ships_count = 0
+
+    for i in fields[player_id]:
+        for j in i:
+            if j == '[ ]':
+                ships_count += 1
+
+    return ships_count
 
 
 def check_player_ship_arrangement(field_id):
