@@ -7,6 +7,7 @@ from data.db_session import global_init
 
 app = Flask(__name__)
 
+
 fields = [
     [[' ', ' ', '[ ]', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
      [' ', ' ', ' ', ' ', '[ ]', ' ', ' ', ' ', ' ', ' '],
@@ -31,13 +32,15 @@ fields = [
      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]]
 statuses = ['preparation', 'game is on', 'game over']
 game_status = 'preparation'
+info = 'Разместите корабли'
+count = 0
 
 
 def main():
     @app.route('/')
     def index():
         return render_template('index.html', player1_field=fields[0],
-                               player2_field=fields[1])
+                               player2_field=fields[1], info=info)
 
     @app.route('/button/<button_id>')
     def buttons(button_id):
@@ -50,12 +53,12 @@ def main():
             button_id[3] = ''.join(button_id[3:])
             cell = fields[field_id][y][x]
 
-        global game_status
+        global game_status, info
 
         if game_status == statuses[0]:
             if button_id == 'start' and check_player_ship_arrangement(0) is True:
                 game_status = statuses[1]
-                print('Игра началась')
+                info = 'Игра началась!'
 
             elif button_id[1] == '1':
                 if cell == ' ':
@@ -64,10 +67,11 @@ def main():
                     fields[field_id][y][x] = ' '
 
             elif button_id[1] == '2':
-                print('Вы не можете стрелять по вражескому полю на этапе подготовки')
+                info = 'Вы не можете стрелять по вражескому полю на этапе подготовки!'
+
         elif game_status == statuses[1]:
             if button_id[1] == '1':
-                print('Вы не можете стрелять по своему полю!')
+                info = 'Вы не можете стрелять по своему полю!'
 
             elif button_id[1] == '2':
                 shot(cell, cords)
@@ -78,22 +82,92 @@ def main():
 
 
 def shot(cell, cord):
+    global info, count
     field_id, y, x = cord
 
     if cell == '[ ]':
         fields[field_id][y][x] = '[X]'
-        if check_nearby_cells([field_id, y, x]) == 0:
-            mark_destroyed_ship([field_id, y, x])
-            print('Вражеский корабль потоплен!')
+
+        if check_whole_sections(cord, define_plane(cord)) == 0:
+            mark_destroyed_ship(cord)
+            print(count)
+            if count == 20:
+                info = "ВЫ ВЫИГРАЛИ"
+            else:
+                info = 'Вражеский корабль потоплен!'
         else:
-            print('Вражеский корабль подбит!')
+            if count == 20:
+                info = "ВЫ ВЫИГРАЛИ"
+            else:
+                info = 'Вражеский корабль подбит!'
 
     elif cell == ' ':
         fields[field_id][y][x] = ' • '
-        print('Мимо')
+        info = 'Мимо'
 
     elif cell == '[X]' or cell == ' • ':
-        print('Вы уже стреляли в эту клетку')
+        info = 'Вы уже стреляли в эту клетку'
+
+
+def check_player_ship_arrangement(field_id):
+    global info
+
+    ships = []
+    ships_cords = []
+
+    for i in range(len(fields[field_id])):
+        for j in range(len(fields[field_id])):
+            cord = [field_id, i, j]
+            ship_plane = define_plane(cord)
+
+            if ship_plane is None:
+                info = 'В расстановке кораблей обнаружена ошибка!'
+                return False
+            elif (j, i) in ships_cords:
+                continue
+            elif fields[field_id][i][j] == '[ ]':
+                ship_size = identify_ship(cord, ship_plane)
+                ships.append(ship_size)
+                ships_cords.extend(identify_ship_cords(cord, ship_plane, ship_size))
+
+    ships.sort()
+
+    if len(ships_cords) == 20 and ships == [1, 1, 1, 1, 2, 2, 2, 3, 3, 4]:
+        return True
+    info = 'В расстановке кораблей обнаружена ошибка!'
+    return False
+
+
+def identify_ship(cord, ship_plane):
+    field_id, y, x = cord
+
+    ship_size = 0
+
+    while x <= 9 and y <= 9 and fields[field_id][y][x] == '[ ]':
+        if ship_plane:
+            if x <= 9 and fields[field_id][y][x] == '[ ]':
+                ship_size += 1
+                x += 1
+        elif not ship_plane:
+            if y <= 9 and fields[field_id][y][x] == '[ ]':
+                ship_size += 1
+                y += 1
+
+    return ship_size
+
+
+def identify_ship_cords(cord, ship_plane, ship_size):
+    field_id, y, x = cord
+
+    cords = []
+
+    for i in range(ship_size):
+        if ship_plane:
+            cords.append((x + i, y))
+        elif not ship_plane:
+            cords.append((x, y + i))
+
+    return cords
 
 
 def place_ship(x, y, hor, length, field):
@@ -135,10 +209,9 @@ def random_placement(field):
         place_ship(x, y, hor, length, field)
 
 
-def check_nearby_cells(cord):
-    location_horizontal = define_plane(cord)
-
+def check_whole_sections(cord, location_horizontal):
     field_id, y, x = cord
+
     whole_sections = 0
 
     while x != -1:
