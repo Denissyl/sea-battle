@@ -54,8 +54,9 @@ def main():
         global game_status
 
         if game_status == statuses[0]:
-            if button_id == 'start':
+            if button_id == 'start' and check_player_ship_arrangement(0) is True:
                 game_status = statuses[1]
+                print('Игра началась')
 
             elif button_id[1] == '1':
                 if cell == ' ':
@@ -151,9 +152,9 @@ def check_nearby_cells(cord):
         else:
             y -= 1
 
-    if location_horizontal:
+    if location_horizontal and x != 9:
         x += 1
-    else:
+    elif not location_horizontal and y != 9:
         y += 1
 
     while x != 10:
@@ -175,24 +176,14 @@ def check_nearby_cells(cord):
 def define_plane(cord):
     field_id, y, x = cord
 
-    result = None
-    for i in range(-1, 2):
-        if y == 0 and i == -1 or y == 9 and i == 1:
-            continue
-        for j in range(-1, 2):
-            if x == 0 and j == -1 or x == 9 and j == 1:
-                continue
-            elif fields[field_id][y + i][x + j] in ['[ ]', '[X]']:
-                if result is not None:
-                    result = None
-                elif i == 0 and j in [-1, 1]:
-                    result = True
-                elif j == 0 and i in [-1, 1]:
-                    result = False
-                elif i in [-1, 1] and j in [-1, 1]:
-                    result = None
-
-    return result
+    if x != 0 and fields[field_id][y][x - 1] in ['[ ]', '[X]'] or \
+            x != 9 and fields[field_id][y][x + 1] in ['[ ]', '[X]']:
+        return True
+    elif y != 0 and fields[field_id][y - 1][x] in ['[ ]', '[X]'] or \
+            y != 9 and fields[field_id][y + 1][x] in ['[ ]', '[X]']:
+        return False
+    else:
+        return True
 
 
 def mark_destroyed_ship(cord):
