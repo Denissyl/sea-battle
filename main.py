@@ -7,7 +7,6 @@ from data.db_session import global_init
 
 app = Flask(__name__)
 
-
 fields = [
     [[' ', ' ', '[ ]', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
      [' ', ' ', ' ', ' ', '[ ]', ' ', ' ', ' ', ' ', ' '],
@@ -211,7 +210,6 @@ def random_placement(field):
 
 def check_whole_sections(cord, location_horizontal):
     field_id, y, x = cord
-
     whole_sections = 0
 
     while x != -1:
