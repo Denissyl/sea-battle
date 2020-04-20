@@ -3,7 +3,8 @@ import random
 
 from flask import Flask, render_template, redirect
 
-from data.db_session import global_init
+from data.db_session import global_init, create_session
+from data.users import User
 
 app = Flask(__name__)
 
@@ -240,6 +241,20 @@ def set_dots(cord):
 if __name__ == '__main__':
     main()
     global_init('db/seabattle.sqlite')
+    session = create_session()
+    user12 = User()
+    user12.id = 0
+    user12.nickname = 'init'
+    user12.email = 'abc@gmail.com'
+    user12.set_password('🅿🅰🆂🆂🆆🅾🆁🅳')
+    bot = User()
+    bot.id = 1
+    bot.nickname = 'bot'
+    bot.email = 'bot@gmail.com'
+    bot.set_password('🅱🅾🆃')
+    session.add(user12)
+    session.add(bot)
+    session.commit()
     port = int(os.environ.get('PORT', 7000))
     app.run('0.0.0.0', port)
 
