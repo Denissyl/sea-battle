@@ -39,8 +39,6 @@ game_status = 'preparation'
 info = 'Разместите корабли'
 
 
-
-
 def main():
     @app.route('/')
     def index():
