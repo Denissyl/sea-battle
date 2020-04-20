@@ -115,6 +115,10 @@
             {% set url = 'button/p1' + letters_column[(loop.index) - 1] + count | string %}
             {% if i == '[ ]' %}
                 <td><div class="my_div2"><a href={{ url }} class="button"></a></div></td>
+            {% elif i == '[X]' %}
+                <td bgcolor="#B22222"><a href={{ url }} class="button"></a></td>
+            {% elif i == ' • ' %}
+                <td><div class="my_div">&#9679;</div></td>
             {% else %}
                 <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
             {% endif %}
