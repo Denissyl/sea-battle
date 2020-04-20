@@ -113,6 +113,8 @@ def shot(cell, cord):
             game.player1_field = fields[0]
         else:
             game.player2_field = fields[1]
+        session.add(game)
+        session.commit()
 
 
 def place_ship(x, y, hor, length, field):
@@ -125,6 +127,8 @@ def place_ship(x, y, hor, length, field):
         game.player1_field = fields[0]
     else:
         game.player2_field = fields[1]
+    session.add(game)
+    session.commit()
 
 
 def can_place_ship(x, y, hor, length, field):
