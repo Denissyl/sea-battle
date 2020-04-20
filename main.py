@@ -4,21 +4,22 @@ import random
 from flask import Flask, render_template, redirect
 
 from data.db_session import global_init, create_session
+from data.fields import Fields
 from data.users import User
 
 app = Flask(__name__)
 
 fields = [
-    [[' ', ' ', '[ ]', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-     [' ', ' ', ' ', ' ', '[ ]', ' ', ' ', ' ', ' ', ' '],
-     [' ', ' ', ' ', ' ', ' ', ' ', '[ ]', ' ', ' ', ' '],
-     ['[ ]', ' ', ' ', ' ', '[ ]', ' ', '[ ]', ' ', ' ', '[ ]'],
-     ['[ ]', ' ', ' ', ' ', '[ ]', ' ', '[ ]', ' ', ' ', ' '],
-     ['[ ]', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-     ['[ ]', ' ', ' ', '[ ]', ' ', ' ', ' ', '[ ]', ' ', ' '],
-     [' ', ' ', ' ', '[ ]', ' ', ' ', ' ', '[ ]', ' ', ' '],
-     [' ', '[ ]', ' ', '[ ]', ' ', ' ', ' ', ' ', ' ', ' '],
-     [' ', '[ ]', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '[ ]']],
+    [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']],
 
     [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -32,12 +33,20 @@ fields = [
      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]]
 statuses = ['preparation', 'game is on', 'game over']
 game_status = 'preparation'
+global_init('db/seabattle.sqlite')
+session = create_session()
+game = Fields()
+game.player1_field_isfilled = True
+game.player1_field = str(fields[0])
+game.player2_field = str(fields[1])
+game.player2_field_isfilled = True
+game.player1_id = 0
+game.player2_id = 1
+session.add(game)
+session.commit()
 
 
 def main():
-    global_init('db/seabattle.sqlite')
-    session = create_session()
-
     @app.route('/')
     def index():
         return render_template('index.html', player1_field=fields[0],
@@ -78,6 +87,7 @@ def main():
         return redirect('/')
 
     random_placement(1)
+    random_placement(0)
 
 
 def shot(cell, cord):
@@ -98,6 +108,12 @@ def shot(cell, cord):
     elif cell == '[X]' or cell == ' • ':
         print('Вы уже стреляли в эту клетку')
 
+    if cell in ['[ ]', ' ']:
+        if field_id == 0:
+            game.player1_field = fields[0]
+        else:
+            game.player2_field = fields[1]
+
 
 def place_ship(x, y, hor, length, field):
     for i in range(length):
@@ -105,6 +121,10 @@ def place_ship(x, y, hor, length, field):
             fields[field][y][x + i] = '[ ]'
         else:
             fields[field][y + i][x] = '[ ]'
+    if field == 0:
+        game.player1_field = fields[0]
+    else:
+        game.player2_field = fields[1]
 
 
 def can_place_ship(x, y, hor, length, field):
