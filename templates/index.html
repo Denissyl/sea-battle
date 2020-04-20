@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
         <title>Морской бой</title>
         <style type="text/css">
             td {
@@ -39,10 +40,54 @@
                 display:block;
                 height:100%;
                 width:100%;
+
             }
+
+<!--            a2.button2 {-->
+<!--              color: #080808; /* цвет текста */-->
+<!--              text-decoration: none; /* убирать подчёркивание у ссылок */-->
+<!--              user-select: none; /* убирать выделение текста */-->
+<!--              background: rgb(0,238,118); /* фон кнопки */-->
+<!--              padding: .7em 1.5em; /* отступ от текста */-->
+<!--              outline: none; /* убирать контур в Mozilla */-->
+
+<!--            }-->
+<!--            a2.button2:hover { background: rgb(20,258,138); } /* при наведении курсора мышки */-->
+<!--            a2.button2:active { background: rgb(0,150,50); } /* при нажатии */-->
+
+<!--            a3.button3 {-->
+<!--              color: #080808; /* цвет текста */-->
+<!--              text-decoration: none; /* убирать подчёркивание у ссылок */-->
+<!--              user-select: none; /* убирать выделение текста */-->
+<!--              background: rgb(212,75,56); /* фон кнопки */-->
+<!--              padding: .7em 1.5em; /* отступ от текста */-->
+<!--              outline: none; /* убирать контур в Mozilla */-->
+
+<!--            }-->
+<!--            a3.button3:hover { background: rgb(232,95,76); } /* при наведении курсора мышки */-->
+<!--            a3.button3:active { background: rgb(152,15,0); } /* при нажатии */-->
+
         </style>
     </head>
+
+
+<!--<a2 style="text-align: center;" class="button2" href="/register">Зарегистрироваться</a2>-->
+<!--<a3 class="button3" href="/login">Войти</a3>-->
+
 <body bgcolor="#F0F8FF">
+<div style="clear: both;">
+    <form action="/register">
+        <input type="submit" style="margin: 0 auto; top: 85%; height: 30px; width: 150px; display: block;"
+               name="register"
+               value="Зарегистрироваться" />
+    </form>
+    <form action="/login">
+        <input type="submit" style="margin: 0 auto; top: 85%; height: 30px; width: 150px; display: block;"
+               name="login"
+               value="Войти" />
+    </form>
+
+</div>
 <h1 style="color:#000000; text-align: center;"> Морской бой </h1>
 <h2 style="color:#696969; text-align: center;"> {{ info }} </h2>
 <div style="max-width: 60%; margin: 100px auto 10px">
