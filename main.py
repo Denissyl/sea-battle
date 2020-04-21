@@ -32,7 +32,7 @@ fields = [
 statuses = ['preparation', 'game is on', 'game over']
 game_status = 'preparation'
 info = 'Разместите корабли'
-
+turn = None
 
 
 def main():
@@ -52,12 +52,13 @@ def main():
             button_id[3] = ''.join(button_id[3:])
             cell = fields[field_id][y][x]
 
-        global game_status, info
+        global game_status, info, turn
 
         if game_status == statuses[0]:
             if button_id == 'start' and check_player_ship_arrangement(0) is True:
                 game_status = statuses[1]
                 info = 'Игра началась!'
+                turn = 'player1'
 
             elif button_id[1] == '1':
                 if cell == ' ':
@@ -83,6 +84,9 @@ def main():
             elif button_id[1] == '2':
                 shot(cell, cords)
 
+                if turn == 'ai':
+                    ai_shot(0)
+
         elif game_status == statuses[2]:
             info = 'Игра окончена'
 
@@ -92,7 +96,7 @@ def main():
 
 
 def shot(cell, cord):
-    global info
+    global info, turn
     field_id, y, x = cord
 
     if cell == '[ ]':
@@ -107,9 +111,84 @@ def shot(cell, cord):
     elif cell == ' ':
         fields[field_id][y][x] = ' • '
         info = 'Мимо'
+        turn = 'ai'
 
     elif cell == '[X]' or cell == ' • ':
         info = 'Вы уже стреляли в эту клетку'
+
+
+def ai_shot(enemy_field_id, retry=False):
+    if not retry:
+        for i in range(len(fields[enemy_field_id])):
+            for j in range(len(fields[enemy_field_id][i])):
+                cord = enemy_field_id, i, j
+                if fields[enemy_field_id][i][j] == '[X]' and check_whole_sections(cord, define_plane(cord)) and \
+                        check_place_for_shot(cord):
+
+                    possible_ship_cords = determine_possible_ship_cords((enemy_field_id, i, j))
+
+                    target_y, target_x = random.choice(possible_ship_cords)
+                    target_cords = enemy_field_id, target_y, target_x
+
+                    check_shot_ai(target_cords)
+
+                    return
+
+    target_y, target_x = random.choice(range(10)), random.choice(range(10))
+    cord = enemy_field_id, target_y, target_x
+
+    check_shot_ai(cord)
+
+
+def check_shot_ai(cord):
+    global info, turn
+    field_id, y, x = cord
+    cell = fields[field_id][y][x]
+
+    if cell in ['[X]', ' • ']:
+        ai_shot(field_id, True)
+    elif cell == ' ':
+        fields[field_id][y][x] = ' • '
+        info = 'Противник промахнулся'
+        turn = 'player1'
+    elif cell == '[ ]':
+        target_cord = field_id, y, x
+
+        fields[field_id][y][x] = '[X]'
+        if check_whole_sections(target_cord, define_plane(target_cord)) == 0:
+            mark_destroyed_ship(cord)
+            info = 'Противник потопил ваш корабль'
+        else:
+            info = 'Прямое попадание по вашему кораблю'
+
+        ai_shot(0)
+
+
+def determine_possible_ship_cords(cord):
+    field_id, y, x = cord
+    cord_mod = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    possible_ship_cords = []
+
+    for mod in cord_mod:
+        if y + mod[0] in range(10) and x + mod[1] in range(10) and fields[field_id][y + mod[0]][x + mod[1]] == '[X]' \
+                and fields[field_id][y - mod[0]][x - mod[1]] != '[X]':
+            return [(y - mod[0], x - mod[1])]
+        elif y + mod[0] in range(10) and x + mod[1] in range(10) and \
+                fields[field_id][y + mod[0]][x + mod[1]] in ['[ ]', ' ']:
+            possible_ship_cords.append((y + mod[0], x + mod[1]))
+
+    return possible_ship_cords
+
+
+def check_place_for_shot(cord):
+    ship_plane = define_plane(cord)
+    field_id, y, x = cord
+
+    if ship_plane and fields[field_id][y][x - 1] in ['[X]', ' • '] and fields[field_id][y][x + 1] in ['[X]', ' • '] or \
+            not ship_plane and fields[field_id][y - 1][x] in ['[X]', ' • '] and \
+            fields[field_id][y + 1][x] in ['[X]', ' • ']:
+        return False
+    return True
 
 
 def check_count_ships(player_id):
@@ -224,10 +303,12 @@ def random_placement(field):
 
 
 def check_whole_sections(cord, location_horizontal):
+    global fields
+
     field_id, y, x = cord
     whole_sections = 0
 
-    while x != -1:
+    while x != -1 and y != -1:
         if fields[field_id][y][x] == '[ ]':
             whole_sections += 1
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
@@ -242,7 +323,7 @@ def check_whole_sections(cord, location_horizontal):
     elif not location_horizontal and y != 9:
         y += 1
 
-    while x != 10:
+    while x != 10 and y != 10:
         if fields[field_id][y][x] == '[ ]':
             whole_sections += 1
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
@@ -251,9 +332,6 @@ def check_whole_sections(cord, location_horizontal):
             x += 1
         else:
             y += 1
-
-    else:
-        return 0
 
     return whole_sections
 
@@ -275,7 +353,7 @@ def mark_destroyed_ship(cord):
     location_horizontal = define_plane(cord)
     field_id, y, x = cord
 
-    while x != -1:
+    while x != -1 and y != -1:
         if fields[field_id][y][x] == '[X]':
             set_dots([field_id, y, x])
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
@@ -290,7 +368,7 @@ def mark_destroyed_ship(cord):
     else:
         y += 1
 
-    while x != 10:
+    while x != 10 and y != 10:
         if fields[field_id][y][x] == '[X]':
             set_dots([field_id, y, x])
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
