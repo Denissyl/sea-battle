@@ -303,9 +303,9 @@ def check_player_ship_arrangement(field_id):
             elif (j, i) in ships_cords:
                 continue
             elif fields[field_id][i][j] == '[ ]':
-                ship_size = identify_ship(cord, ship_plane)
+                ship_size = identify_ship(cord)
                 ships.append(ship_size)
-                ships_cords.extend(identify_ship_cords(cord, ship_plane, ship_size))
+                ships_cords.extend(identify_ship_cords(cord, ship_size))
 
     ships.sort()
 
