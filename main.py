@@ -8,6 +8,8 @@ from data import db_session
 from data.login_form import LoginForm
 from data.register import RegisterForm
 from data.db_session import global_init
+from data.db_session import global_init, create_session
+from data.fields import Fields
 from data.users import User
 
 app = Flask(__name__)
@@ -16,16 +18,16 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 fields = [
-    [[' ', ' ', '[ ]', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-     [' ', ' ', ' ', ' ', '[ ]', ' ', ' ', ' ', ' ', ' '],
-     [' ', ' ', ' ', ' ', ' ', ' ', '[ ]', ' ', ' ', ' '],
-     ['[ ]', ' ', ' ', ' ', '[ ]', ' ', '[ ]', ' ', ' ', '[ ]'],
-     ['[ ]', ' ', ' ', ' ', '[ ]', ' ', '[ ]', ' ', ' ', ' '],
-     ['[ ]', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-     ['[ ]', ' ', ' ', '[ ]', ' ', ' ', ' ', '[ ]', ' ', ' '],
-     [' ', ' ', ' ', '[ ]', ' ', ' ', ' ', '[ ]', ' ', ' '],
-     [' ', '[ ]', ' ', '[ ]', ' ', ' ', ' ', ' ', ' ', ' '],
-     [' ', '[ ]', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '[ ]']],
+    [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']],
 
     [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -39,6 +41,17 @@ fields = [
      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]]
 statuses = ['preparation', 'game is on', 'game over']
 game_status = 'preparation'
+global_init('db/seabattle.sqlite')
+session = create_session()
+game = Fields()
+game.player1_field_isfilled = True
+game.player1_field = str(fields[0])
+game.player2_field = str(fields[1])
+game.player2_field_isfilled = True
+game.player1_id = 0
+game.player2_id = 1
+session.add(game)
+session.commit()
 info1 = 'Разместите корабли'
 info2 = ' '
 info3 = ' '
@@ -179,6 +192,14 @@ def shot(cell, cord):
 
     elif cell == '[X]' or cell == ' • ':
         info3 = 'Вы уже стреляли в эту клетку'
+
+    if cell in ['[ ]', ' ']:
+        if field_id == 0:
+            game.player1_field = fields[0]
+        else:
+            game.player2_field = fields[1]
+        session.add(game)
+        session.commit()
 
 
 def ai_shot(enemy_field_id, retry=False):
@@ -335,6 +356,12 @@ def place_ship(x, y, hor, length, field):
             fields[field][y][x + i] = '[ ]'
         else:
             fields[field][y + i][x] = '[ ]'
+    if field == 0:
+        game.player1_field = fields[0]
+    else:
+        game.player2_field = fields[1]
+    session.add(game)
+    session.commit()
 
 
 def can_place_ship(x, y, hor, length, field):
