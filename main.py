@@ -7,7 +7,6 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from data import db_session
 from data.login_form import LoginForm
 from data.register import RegisterForm
-from data.db_session import global_init
 from data.db_session import global_init, create_session
 from data.fields import Fields
 from data.users import User
@@ -195,9 +194,9 @@ def shot(cell, cord):
 
     if cell in ['[ ]', ' ']:
         if field_id == 0:
-            game.player1_field = fields[0]
+            game.player1_field = str(fields[0])
         else:
-            game.player2_field = fields[1]
+            game.player2_field = str(fields[1])
         session.add(game)
         session.commit()
 
@@ -357,9 +356,9 @@ def place_ship(x, y, hor, length, field):
         else:
             fields[field][y + i][x] = '[ ]'
     if field == 0:
-        game.player1_field = fields[0]
+        game.player1_field = str(fields[0])
     else:
-        game.player2_field = fields[1]
+        game.player2_field = str(fields[1])
     session.add(game)
     session.commit()
 
@@ -488,7 +487,6 @@ def set_dots(cord):
 
 if __name__ == '__main__':
     main()
-    app.debug = True
     global_init('db/seabattle.sqlite')
     port = int(os.environ.get('PORT', 7000))
     app.run('0.0.0.0', port)
