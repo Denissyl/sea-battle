@@ -166,7 +166,7 @@ def shot(cell, cord):
     if cell == '[ ]':
         fields[field_id][y][x] = '[X]'
 
-        if check_whole_sections(cord, define_plane(cord)) == 0:
+        if check_whole_sections(cord) == 0:
             mark_destroyed_ship(cord)
             info3 = 'Вражеский корабль потоплен!'
         else:
@@ -186,7 +186,7 @@ def ai_shot(enemy_field_id, retry=False):
         for i in range(len(fields[enemy_field_id])):
             for j in range(len(fields[enemy_field_id][i])):
                 cord = enemy_field_id, i, j
-                if fields[enemy_field_id][i][j] == '[X]' and check_whole_sections(cord, define_plane(cord)) and \
+                if fields[enemy_field_id][i][j] == '[X]' and check_whole_sections(cord) and \
                         check_place_for_shot(cord):
 
                     possible_ship_cords = determine_possible_ship_cords((enemy_field_id, i, j))
@@ -220,7 +220,7 @@ def check_shot_ai(cord):
         target_cord = field_id, y, x
 
         fields[field_id][y][x] = '[X]'
-        if check_whole_sections(target_cord, define_plane(target_cord)) == 0:
+        if check_whole_sections(target_cord) == 0:
             mark_destroyed_ship(cord)
             info2 = 'Противник потопил ваш корабль'
         else:
@@ -295,7 +295,8 @@ def check_player_ship_arrangement(field_id):
     return False
 
 
-def identify_ship(cord, ship_plane):
+def identify_ship(cord):
+    ship_plane = define_plane(cord)
     field_id, y, x = cord
 
     ship_size = 0
@@ -313,7 +314,8 @@ def identify_ship(cord, ship_plane):
     return ship_size
 
 
-def identify_ship_cords(cord, ship_plane, ship_size):
+def identify_ship_cords(cord, ship_size):
+    ship_plane = define_plane(cord)
     field_id, y, x = cord
 
     cords = []
@@ -366,9 +368,10 @@ def random_placement(field):
         place_ship(x, y, hor, length, field)
 
 
-def check_whole_sections(cord, location_horizontal):
+def check_whole_sections(cord):
     global fields
 
+    ship_plane = define_plane(cord)
     field_id, y, x = cord
     whole_sections = 0
 
@@ -377,14 +380,14 @@ def check_whole_sections(cord, location_horizontal):
             whole_sections += 1
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
             break
-        if location_horizontal:
+        if ship_plane:
             x -= 1
         else:
             y -= 1
 
-    if location_horizontal and x != 9:
+    if ship_plane and x != 9:
         x += 1
-    elif not location_horizontal and y != 9:
+    elif not ship_plane and y != 9:
         y += 1
 
     while x != 10 and y != 10:
@@ -392,7 +395,7 @@ def check_whole_sections(cord, location_horizontal):
             whole_sections += 1
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
             break
-        if location_horizontal:
+        if ship_plane:
             x += 1
         else:
             y += 1
@@ -414,7 +417,7 @@ def define_plane(cord):
 
 
 def mark_destroyed_ship(cord):
-    location_horizontal = define_plane(cord)
+    ship_plane = define_plane(cord)
     field_id, y, x = cord
 
     while x != -1 and y != -1:
@@ -422,12 +425,12 @@ def mark_destroyed_ship(cord):
             set_dots([field_id, y, x])
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
             break
-        if location_horizontal:
+        if ship_plane:
             x -= 1
         else:
             y -= 1
 
-    if location_horizontal:
+    if ship_plane:
         x += 1
     else:
         y += 1
@@ -437,7 +440,7 @@ def mark_destroyed_ship(cord):
             set_dots([field_id, y, x])
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
             break
-        if location_horizontal:
+        if ship_plane:
             x += 1
         else:
             y += 1
