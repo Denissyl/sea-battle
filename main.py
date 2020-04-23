@@ -2,7 +2,7 @@ import os
 import random
 
 from flask import Flask, render_template, redirect, request, make_response, session
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 from data import db_session
 from data.login_form import LoginForm
@@ -39,14 +39,18 @@ fields = [
      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]]
 statuses = ['preparation', 'game is on', 'game over']
 game_status = 'preparation'
-info = 'Разместите корабли'
+info1 = 'Разместите корабли'
+info2 = ' '
+info3 = ' '
+
 turn = None
+
 
 def main():
     @app.route('/')
     def index():
         return render_template('index.html', player1_field=fields[0],
-                               player2_field=fields[1], info=info)
+                               player2_field=fields[1], info1=info1, info2=info2, info3=info3)
 
     db_session.global_init("db/seabattle.sqlite")
 
@@ -101,8 +105,10 @@ def main():
     @app.route('/button/<button_id>')
     @login_required
     def buttons(button_id):
+        global game_status, info1, info2, info3, turn
 
         if button_id != 'start':
+
             letters_id = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7, 'i': 8, 'j': 9}
             field_id, y, x = int(button_id[1]) - 1, int(''.join(button_id[3:])) - 1, letters_id[button_id[2]]
             cords = field_id, y, x
@@ -110,12 +116,12 @@ def main():
             button_id[3] = ''.join(button_id[3:])
             cell = fields[field_id][y][x]
 
-        global game_status, info, turn
-
         if game_status == statuses[0]:
             if button_id == 'start' and check_player_ship_arrangement(0) is True:
                 game_status = statuses[1]
-                info = 'Игра началась!'
+                info1 = 'Игра началась!'
+                info2 = ' '
+                info3 = ' '
                 turn = 'player1'
 
             elif button_id[1] == '1':
@@ -125,19 +131,19 @@ def main():
                     fields[field_id][y][x] = ' '
 
             elif button_id[1] == '2':
-                info = 'Вы не можете стрелять по вражескому полю на этапе подготовки!'
+                info3 = 'Вы не можете стрелять по вражескому полю на этапе подготовки!'
 
         elif game_status == statuses[1]:
             if check_count_ships(0) == 0:
-                info = 'Вы проиграли'
+                info1 = 'Вы проиграли'
                 game_status = statuses[2]
 
             elif check_count_ships(1) == 0:
-                info = 'Вы победили'
+                info1 = 'Вы победили'
                 game_status = statuses[2]
 
             elif button_id[1] == '1':
-                info = 'Вы не можете стрелять по своему полю!'
+                info2 = 'Вы не можете стрелять по своему полю!'
 
             elif button_id[1] == '2':
                 shot(cell, cords)
@@ -146,7 +152,7 @@ def main():
                     ai_shot(0)
 
         elif game_status == statuses[2]:
-            info = 'Игра окончена'
+            info1 = 'Игра окончена'
 
         return redirect('/')
 
@@ -154,7 +160,7 @@ def main():
 
 
 def shot(cell, cord):
-    global info, turn
+    global info3, turn
     field_id, y, x = cord
 
     if cell == '[ ]':
@@ -162,17 +168,17 @@ def shot(cell, cord):
 
         if check_whole_sections(cord, define_plane(cord)) == 0:
             mark_destroyed_ship(cord)
-            info = 'Вражеский корабль потоплен!'
+            info3 = 'Вражеский корабль потоплен!'
         else:
-            info = 'Вражеский корабль подбит!'
+            info3 = 'Вражеский корабль подбит!'
 
     elif cell == ' ':
         fields[field_id][y][x] = ' • '
-        info = 'Мимо'
+        info3 = 'Мимо'
         turn = 'ai'
 
     elif cell == '[X]' or cell == ' • ':
-        info = 'Вы уже стреляли в эту клетку'
+        info3 = 'Вы уже стреляли в эту клетку'
 
 
 def ai_shot(enemy_field_id, retry=False):
@@ -189,7 +195,6 @@ def ai_shot(enemy_field_id, retry=False):
                     target_cords = enemy_field_id, target_y, target_x
 
                     check_shot_ai(target_cords)
-
                     return
 
     target_y, target_x = random.choice(range(10)), random.choice(range(10))
@@ -199,26 +204,27 @@ def ai_shot(enemy_field_id, retry=False):
 
 
 def check_shot_ai(cord):
-    global info, turn
+    global info2, turn
     field_id, y, x = cord
     cell = fields[field_id][y][x]
 
     if cell in ['[X]', ' • ']:
         ai_shot(field_id, True)
+
     elif cell == ' ':
         fields[field_id][y][x] = ' • '
-        info = 'Противник промахнулся'
+        info2 = 'Противник промахнулся'
         turn = 'player1'
+
     elif cell == '[ ]':
         target_cord = field_id, y, x
 
         fields[field_id][y][x] = '[X]'
         if check_whole_sections(target_cord, define_plane(target_cord)) == 0:
             mark_destroyed_ship(cord)
-            info = 'Противник потопил ваш корабль'
+            info2 = 'Противник потопил ваш корабль'
         else:
-            info = 'Прямое попадание по вашему кораблю'
-
+            info2 = 'Прямое попадание по вашему кораблю'
         ai_shot(0)
 
 
@@ -261,7 +267,7 @@ def check_count_ships(player_id):
 
 
 def check_player_ship_arrangement(field_id):
-    global info
+    global info2
 
     ships = []
     ships_cords = []
@@ -272,7 +278,7 @@ def check_player_ship_arrangement(field_id):
             ship_plane = define_plane(cord)
 
             if ship_plane is None:
-                info = 'В расстановке кораблей обнаружена ошибка!'
+                info2 = 'В расстановке кораблей обнаружена ошибка!'
                 return False
             elif (j, i) in ships_cords:
                 continue
@@ -285,7 +291,7 @@ def check_player_ship_arrangement(field_id):
 
     if len(ships_cords) == 20 and ships == [1, 1, 1, 1, 2, 2, 2, 3, 3, 4]:
         return True
-    info = 'В расстановке кораблей обнаружена ошибка!'
+    info2 = 'В расстановке кораблей обнаружена ошибка!'
     return False
 
 
@@ -452,6 +458,7 @@ def set_dots(cord):
 
 if __name__ == '__main__':
     main()
+    app.debug = True
     global_init('db/seabattle.sqlite')
     port = int(os.environ.get('PORT', 7000))
     app.run('0.0.0.0', port)

@@ -9,11 +9,13 @@
                 width:9%;
                 position:relative;
             }
+
             td:after{
                 content:'';
                 display:block;
                 margin-top:100%;
             }
+
             td .my_div {
                 font-size: 20;
                 position:absolute;
@@ -35,47 +37,33 @@
                 right:0;
                 background:RoyalBlue;
             }
+
+            td .my_div3 {
+                font-size: 20;
+                position:absolute;
+                padding-top: 70;
+                top:0;
+                bottom:0;
+                left:0;
+                right:0;
+                background:#B22222;
+            }
+
             a.button {
                 display:block;
                 height:100%;
                 width:100%;
-
             }
-
-<!--            a2.button2 {-->
-<!--              color: #080808; /* цвет текста */-->
-<!--              text-decoration: none; /* убирать подчёркивание у ссылок */-->
-<!--              user-select: none; /* убирать выделение текста */-->
-<!--              background: rgb(0,238,118); /* фон кнопки */-->
-<!--              padding: .7em 1.5em; /* отступ от текста */-->
-<!--              outline: none; /* убирать контур в Mozilla */-->
-
-<!--            }-->
-<!--            a2.button2:hover { background: rgb(20,258,138); } /* при наведении курсора мышки */-->
-<!--            a2.button2:active { background: rgb(0,150,50); } /* при нажатии */-->
-
-<!--            a3.button3 {-->
-<!--              color: #080808; /* цвет текста */-->
-<!--              text-decoration: none; /* убирать подчёркивание у ссылок */-->
-<!--              user-select: none; /* убирать выделение текста */-->
-<!--              background: rgb(212,75,56); /* фон кнопки */-->
-<!--              padding: .7em 1.5em; /* отступ от текста */-->
-<!--              outline: none; /* убирать контур в Mozilla */-->
-
-<!--            }-->
-<!--            a3.button3:hover { background: rgb(232,95,76); } /* при наведении курсора мышки */-->
-<!--            a3.button3:active { background: rgb(152,15,0); } /* при нажатии */-->
 
         </style>
     </head>
 
-
 <body bgcolor="#F0F8FF">
 
-
+<h1 style="color:#000000; text-align: center;"> Морской бой </h1>
 <header>
         {% if current_user.is_authenticated %}
-            <a style="margin: 0 auto; width: 80px; display: block; font-size:35px" href="/logout">{{ current_user.nickname }}</a>
+            <a class="cent" style="display: table; margin: 0 auto 0 auto; width: 80px; font-size:35px;" href="/logout">{{ current_user.nickname }}</a>
         {% else %}
             <p>
                 <div style="clear: both;">
@@ -87,18 +75,18 @@
                         <input type="submit" style="margin: 0 auto; top: 85%; height: 30px; width: 150px; display: block;"
                                value="Войти" />
                     </form>
-
                 </div>
             </p>
         {% endif %}
 </header>
-
-
-
-<h1 style="color:#000000; text-align: center;"> Морской бой </h1>
-<h2 style="color:#696969; text-align: center;"> {{ info }} </h2>
-<div style="max-width: 60%; margin: 100px auto 10px">
+{% if current_user.is_authenticated %}
+    <h2 style="color:#696969; text-align: center;"> {{ info1 }} </h2>
+{% else %}
+    <h2 style="color:#696969; text-align: center;"> Авторизуйтесь </h2>
+{% endif %}
+<div style="max-width: 60%; margin: 30px auto 10px">
 <table border="2" align="left" width="45%" cellspacing="0">
+    <caption><h2 style="color:#696969"> {{ info2 }} </h2></caption>
     <caption align="bottom"><h2 style="color:#fead00"> Ваше поле </h2></caption>
     {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
     <tr>
@@ -116,9 +104,9 @@
             {% if i == '[ ]' %}
                 <td><div class="my_div2"><a href={{ url }} class="button"></a></div></td>
             {% elif i == '[X]' %}
-                <td bgcolor="#B22222"><a href={{ url }} class="button"></a></td>
+                <td><div class="my_div3"><a href={{ url }} class="button"></a></div></td>
             {% elif i == ' • ' %}
-                <td><div class="my_div">&#9679;</div></td>
+                <td><div class="my_div">&#9679;<a href={{ url }} class="button"></a></div></td>
             {% else %}
                 <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
             {% endif %}
@@ -126,6 +114,7 @@
     {% endfor %}
  </table>
 <table border="2" align="right" width="45%" cellspacing="0">
+    <caption><h2 style="color:#696969"> {{ info3 }} </h2></caption>
     <caption align="bottom"><h2 style="color:#fead00;"> Поле противника </h2></caption>
     {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
     <tr>
@@ -143,9 +132,9 @@
             {% if i == '[ ]' %}
                 <td><div class="my_div"><a href={{ url }} class="button"></a></div></td>
             {% elif i == '[X]' %}
-                <td bgcolor="#B22222"><a href={{ url }} class="button"></a></td>
+                <td><div class="my_div3"><a href={{ url }} class="button"></a></div></td>
             {% elif i == ' • ' %}
-                <td><div class="my_div">&#9679;</div></td>
+                <td><div class="my_div">&#9679;<a href={{ url }} class="button"></a></div></td>
             {% else %}
                 <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
             {% endif %}
