@@ -16,7 +16,7 @@
                 margin-top:100%;
             }
 
-            td .my_div {
+            td .white_cell {
                 font-size: 20;
                 position:absolute;
                 padding-top: 70;
@@ -27,7 +27,7 @@
                 background:white;
             }
 
-            td .my_div2 {
+            td .blue_cell {
                 font-size: 20;
                 position:absolute;
                 padding-top: 70;
@@ -38,7 +38,7 @@
                 background:RoyalBlue;
             }
 
-            td .my_div3 {
+            td .red_cell {
                 font-size: 20;
                 position:absolute;
                 padding-top: 70;
@@ -86,6 +86,11 @@
 {% endif %}
 <div style="max-width: 60%; margin: 30px auto 10px">
 <table border="2" align="left" width="45%" cellspacing="0">
+    <caption align="bottom"><form action="/button/random_placement">
+        <input type="submit" style=" height: 35px; width: 300px; font-weight:bold;"
+               name="random_placement"
+               value="Случайная расстановка кораблей" />
+    </form></caption>
     <caption><h2 style="color:#696969"> {{ info2 }} </h2></caption>
     <caption align="bottom"><h2 style="color:#fead00"> Ваше поле </h2></caption>
     {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
@@ -102,19 +107,21 @@
         {% for i in item %}
             {% set url = 'button/p1' + letters_column[(loop.index) - 1] + count | string %}
             {% if i == '[ ]' %}
-                <td><div class="my_div2"><a href={{ url }} class="button"></a></div></td>
+                <td><div class="blue_cell"><a href={{ url }} class="button"></a></div></td>
             {% elif i == '[X]' %}
-                <td><div class="my_div3"><a href={{ url }} class="button"></a></div></td>
+                <td><div class="red_cell"><a href={{ url }} class="button"></a></div></td>
             {% elif i == ' • ' %}
-                <td><div class="my_div">&#9679;<a href={{ url }} class="button"></a></div></td>
+                <td><div class="white_cell">&#9679;<a href={{ url }} class="button"></a></div></td>
             {% else %}
-                <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
+                <td><div class="white_cell">{{ i }}<a href={{ url }} class="button"></a></div></td>
             {% endif %}
         {% endfor %}
     {% endfor %}
  </table>
 <table border="2" align="right" width="45%" cellspacing="0">
     <caption><h2 style="color:#696969"> {{ info3 }} </h2></caption>
+    <caption align="bottom"> </caption>
+    <caption align="bottom"> </caption>
     <caption align="bottom"><h2 style="color:#fead00;"> Поле противника </h2></caption>
     {% set field_letters = ['', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К'] %}
     <tr>
@@ -130,13 +137,13 @@
         {% for i in item %}
             {% set url = 'button/p2' + letters_column[(loop.index) - 1] + count | string %}
             {% if i == '[ ]' %}
-                <td><div class="my_div"><a href={{ url }} class="button"></a></div></td>
+                <td><div class="white_cell"><a href={{ url }} class="button"></a></div></td>
             {% elif i == '[X]' %}
-                <td><div class="my_div3"><a href={{ url }} class="button"></a></div></td>
+                <td><div class="red_cell"><a href={{ url }} class="button"></a></div></td>
             {% elif i == ' • ' %}
-                <td><div class="my_div">&#9679;<a href={{ url }} class="button"></a></div></td>
+                <td><div class="white_cell">&#9679;<a href={{ url }} class="button"></a></div></td>
             {% else %}
-                <td><div class="my_div">{{ i }}<a href={{ url }} class="button"></a></div></td>
+                <td><div class="white_cell">{{ i }}<a href={{ url }} class="button"></a></div></td>
             {% endif %}
         {% endfor %}
     {% endfor %}
@@ -148,6 +155,11 @@
                name="play"
                value="Играть" />
     </form>
+<!--    <form action="/button/restart">-->
+<!--        <input type="submit" style="margin: 0 auto; top: 85%; height: 50px; width: 200px; display: block;"-->
+<!--               name="restart"-->
+<!--               value="Начать сначала" />-->
+<!--    </form>-->
 </div>
 </body>
 </html>
