@@ -63,7 +63,11 @@
 <h1 style="color:#000000; text-align: center;"> Морской бой </h1>
 <header>
         {% if current_user.is_authenticated %}
-            <a class="cent" style="display: table; margin: 0 auto 0 auto; width: 80px; font-size:35px;" href="/logout">{{ current_user.nickname }}</a>
+            <a class="cent" style="display: table; margin: 0 auto 0 auto; width: 80px; font-size:35px;">{{ current_user.nickname }}</a>
+            <form action="/logout">
+                <input type="submit" style="margin: 0 auto; height: 30px; width: 150px; display: block;"
+                       value="Выйти" />
+            </form>
         {% else %}
             <p>
                 <div style="clear: both;">
@@ -84,7 +88,7 @@
 {% else %}
     <h2 style="color:#696969; text-align: center;"> Авторизуйтесь </h2>
 {% endif %}
-<div style="max-width: 60%; margin: 30px auto 10px">
+<div style="max-width: 60%; margin: 0px auto 0px">
 <table border="2" align="left" width="45%" cellspacing="0">
     <caption align="bottom"><form action="/button/random_placement">
         <input type="submit" style=" height: 35px; width: 300px; font-weight:bold;"
