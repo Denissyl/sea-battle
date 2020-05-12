@@ -120,7 +120,7 @@ def main():
     def buttons(button_id):
         global game_status, info1, info2, info3, turn
 
-        if button_id != 'start':
+        if button_id not in ['start', 'random_placement']:
 
             letters_id = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7, 'i': 8, 'j': 9}
             field_id, y, x = int(button_id[1]) - 1, int(''.join(button_id[3:])) - 1, letters_id[button_id[2]]
@@ -136,7 +136,8 @@ def main():
                 info2 = ' '
                 info3 = ' '
                 turn = 'player1'
-
+            elif button_id == 'random_placement':
+                random_placement(0)
             elif button_id[1] == '1':
                 if cell == ' ':
                     fields[field_id][y][x] = '[ ]'
