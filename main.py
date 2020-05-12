@@ -7,7 +7,8 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from data import db_session
 from data.login_form import LoginForm
 from data.register import RegisterForm
-from data.db_session import global_init
+from data.db_session import global_init, create_session
+from data.fields import Fields
 from data.users import User
 
 app = Flask(__name__)
@@ -16,16 +17,16 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 fields = [
-    [[' ', ' ', '[ ]', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-     [' ', ' ', ' ', ' ', '[ ]', ' ', ' ', ' ', ' ', ' '],
-     [' ', ' ', ' ', ' ', ' ', ' ', '[ ]', ' ', ' ', ' '],
-     ['[ ]', ' ', ' ', ' ', '[ ]', ' ', '[ ]', ' ', ' ', '[ ]'],
-     ['[ ]', ' ', ' ', ' ', '[ ]', ' ', '[ ]', ' ', ' ', ' '],
-     ['[ ]', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-     ['[ ]', ' ', ' ', '[ ]', ' ', ' ', ' ', '[ ]', ' ', ' '],
-     [' ', ' ', ' ', '[ ]', ' ', ' ', ' ', '[ ]', ' ', ' '],
-     [' ', '[ ]', ' ', '[ ]', ' ', ' ', ' ', ' ', ' ', ' '],
-     [' ', '[ ]', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '[ ]']],
+    [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']],
 
     [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -39,6 +40,17 @@ fields = [
      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]]
 statuses = ['preparation', 'game is on', 'game over']
 game_status = 'preparation'
+global_init('db/seabattle.sqlite')
+session = create_session()
+game = Fields()
+game.player1_field_isfilled = True
+game.player1_field = str(fields[0])
+game.player2_field = str(fields[1])
+game.player2_field_isfilled = True
+game.player1_id = 0
+game.player2_id = 1
+session.add(game)
+session.commit()
 info1 = 'Разместите корабли'
 info2 = ' '
 info3 = ' '
@@ -166,7 +178,7 @@ def shot(cell, cord):
     if cell == '[ ]':
         fields[field_id][y][x] = '[X]'
 
-        if check_whole_sections(cord, define_plane(cord)) == 0:
+        if check_whole_sections(cord) == 0:
             mark_destroyed_ship(cord)
             info3 = 'Вражеский корабль потоплен!'
         else:
@@ -180,13 +192,21 @@ def shot(cell, cord):
     elif cell == '[X]' or cell == ' • ':
         info3 = 'Вы уже стреляли в эту клетку'
 
+    if cell in ['[ ]', ' ']:
+        if field_id == 0:
+            game.player1_field = str(fields[0])
+        else:
+            game.player2_field = str(fields[1])
+        session.add(game)
+        session.commit()
+
 
 def ai_shot(enemy_field_id, retry=False):
     if not retry:
         for i in range(len(fields[enemy_field_id])):
             for j in range(len(fields[enemy_field_id][i])):
                 cord = enemy_field_id, i, j
-                if fields[enemy_field_id][i][j] == '[X]' and check_whole_sections(cord, define_plane(cord)) and \
+                if fields[enemy_field_id][i][j] == '[X]' and check_whole_sections(cord) and \
                         check_place_for_shot(cord):
 
                     possible_ship_cords = determine_possible_ship_cords((enemy_field_id, i, j))
@@ -220,7 +240,7 @@ def check_shot_ai(cord):
         target_cord = field_id, y, x
 
         fields[field_id][y][x] = '[X]'
-        if check_whole_sections(target_cord, define_plane(target_cord)) == 0:
+        if check_whole_sections(target_cord) == 0:
             mark_destroyed_ship(cord)
             info2 = 'Противник потопил ваш корабль'
         else:
@@ -283,9 +303,9 @@ def check_player_ship_arrangement(field_id):
             elif (j, i) in ships_cords:
                 continue
             elif fields[field_id][i][j] == '[ ]':
-                ship_size = identify_ship(cord, ship_plane)
+                ship_size = identify_ship(cord)
                 ships.append(ship_size)
-                ships_cords.extend(identify_ship_cords(cord, ship_plane, ship_size))
+                ships_cords.extend(identify_ship_cords(cord, ship_size))
 
     ships.sort()
 
@@ -295,7 +315,8 @@ def check_player_ship_arrangement(field_id):
     return False
 
 
-def identify_ship(cord, ship_plane):
+def identify_ship(cord):
+    ship_plane = define_plane(cord)
     field_id, y, x = cord
 
     ship_size = 0
@@ -313,7 +334,8 @@ def identify_ship(cord, ship_plane):
     return ship_size
 
 
-def identify_ship_cords(cord, ship_plane, ship_size):
+def identify_ship_cords(cord, ship_size):
+    ship_plane = define_plane(cord)
     field_id, y, x = cord
 
     cords = []
@@ -333,6 +355,12 @@ def place_ship(x, y, hor, length, field):
             fields[field][y][x + i] = '[ ]'
         else:
             fields[field][y + i][x] = '[ ]'
+    if field == 0:
+        game.player1_field = str(fields[0])
+    else:
+        game.player2_field = str(fields[1])
+    session.add(game)
+    session.commit()
 
 
 def can_place_ship(x, y, hor, length, field):
@@ -366,9 +394,10 @@ def random_placement(field):
         place_ship(x, y, hor, length, field)
 
 
-def check_whole_sections(cord, location_horizontal):
+def check_whole_sections(cord):
     global fields
 
+    ship_plane = define_plane(cord)
     field_id, y, x = cord
     whole_sections = 0
 
@@ -377,14 +406,14 @@ def check_whole_sections(cord, location_horizontal):
             whole_sections += 1
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
             break
-        if location_horizontal:
+        if ship_plane:
             x -= 1
         else:
             y -= 1
 
-    if location_horizontal and x != 9:
+    if ship_plane and x != 9:
         x += 1
-    elif not location_horizontal and y != 9:
+    elif not ship_plane and y != 9:
         y += 1
 
     while x != 10 and y != 10:
@@ -392,7 +421,7 @@ def check_whole_sections(cord, location_horizontal):
             whole_sections += 1
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
             break
-        if location_horizontal:
+        if ship_plane:
             x += 1
         else:
             y += 1
@@ -414,7 +443,7 @@ def define_plane(cord):
 
 
 def mark_destroyed_ship(cord):
-    location_horizontal = define_plane(cord)
+    ship_plane = define_plane(cord)
     field_id, y, x = cord
 
     while x != -1 and y != -1:
@@ -422,12 +451,12 @@ def mark_destroyed_ship(cord):
             set_dots([field_id, y, x])
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
             break
-        if location_horizontal:
+        if ship_plane:
             x -= 1
         else:
             y -= 1
 
-    if location_horizontal:
+    if ship_plane:
         x += 1
     else:
         y += 1
@@ -437,7 +466,7 @@ def mark_destroyed_ship(cord):
             set_dots([field_id, y, x])
         elif fields[field_id][y][x] not in ['[ ]', '[X]']:
             break
-        if location_horizontal:
+        if ship_plane:
             x += 1
         else:
             y += 1
@@ -458,7 +487,6 @@ def set_dots(cord):
 
 if __name__ == '__main__':
     main()
-    app.debug = True
     global_init('db/seabattle.sqlite')
     port = int(os.environ.get('PORT', 7000))
     app.run('0.0.0.0', port)
